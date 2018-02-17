@@ -1,0 +1,21 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+  - name: example ec2 key
+    ec2_key:
+      name: "{{keyname}}"
+      region: "{{region}}"
+      key_material: "{{ item }}"
+    with_file: "{{keypath}}"
+  - name: create ec2  
+    ec2:
+        region: us-east-1
+        key_name: "{{keyname}}"
+        instance_type: "{{instance_type}}"
+        image: "{{image}}"
+        wait: yes
+        group_id: "{{security_group}}"
+        count: "{{intsnace_count}}"
+        vpc_subnet_id: "{{subnet_id}}"
+        assign_public_ip: yes      
