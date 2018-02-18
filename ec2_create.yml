@@ -2,12 +2,21 @@
 - hosts: localhost
 
   tasks:
+    - name: Create ssh keys for my user  
+      user:
+        name: aniket
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_type: rsa
+        ssh_key_file: ".ssh/{{ item.keyname }}"
+      with_items: "{{ EC2list }}"
+
     - name: Read key contents
       shell: "cat {{item.keypath}}"
       register: sshkeys
       with_items: "{{ EC2list }}"
     
-    - name: Create EC2 keys
+    - name: Create EC2 keys 
       ec2_key:
         region: "{{item.item.region}}"
         name: "{{ item.item.keyname }}"

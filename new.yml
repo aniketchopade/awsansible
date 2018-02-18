@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+
+  tasks:
+  - name: get the username running the deploy
+    shell: whoami
+    register: user

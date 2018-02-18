@@ -2,11 +2,25 @@
 - hosts: localhost  
   gather_facts: no   
   connection: local  
-  tasks:  
+  tasks:
+    - file:
+       path: "/home/aniket/.ssh/{{ item.keyname}}"
+       state: absent             
+      with_items: "{{ EC2list }}"             
+    - file:
+       path: "/home/aniket/.ssh/{{ item.keyname}}.pub"
+       state: absent
+      with_items: "{{ EC2list }}"     
     - name: Gather EC2 facts.
       ec2_remote_facts:
         region: "{{ region }}"
       register: ec2_facts
+    - name: Remove EC2 keys 
+      ec2_key:
+        region: "{{item.region}}"
+        name: "{{ item.keyname }}"
+        state: absent
+      with_items: "{{ EC2list }}"
     - name: Exterminate!
       ec2:
         region: "{{ region }}"
