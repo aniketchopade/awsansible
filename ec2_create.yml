@@ -1,17 +1,23 @@
+---
 - hosts: localhost
-  connection: local
-  gather_facts: False
+
   tasks:
-  - name: example ec2 key
-    ec2_key:
-      name: "{{keyname}}"
-      region: "{{region}}"
-      key_material: "{{ item }}"
-    with_file: "{{keypath}}"
-  - name: create ec2  
-    ec2:
-        region: us-east-1
-        key_name: "{{keyname}}"
+    - name: Read key contents
+      shell: "cat {{item.keypath}}"
+      register: sshkeys
+      with_items: "{{ EC2list }}"
+    
+    - name: Create EC2 keys
+      ec2_key:
+        region: "{{region}}"
+        name: "{{ keyname }}"
+        key_material: "{{ item.stdout }} "
+      with_items: "{{sshkeys.results}}"
+
+    - name: Build All three clusters  
+      ec2:
+        region: "{{region}}"
+        key_name: "{{item.keyname}}"
         instance_type: "{{instance_type}}"
         image: "{{image}}"
         wait: yes
@@ -19,3 +25,4 @@
         count: "{{intsnace_count}}"
         vpc_subnet_id: "{{subnet_id}}"
         assign_public_ip: yes      
+      with_items: "{{EC2list}}"

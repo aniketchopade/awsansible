@@ -1,0 +1,16 @@
+---  
+- hosts: localhost  
+  gather_facts: no   
+  connection: local  
+  tasks:  
+    - name: Gather EC2 facts.
+      ec2_remote_facts:
+        region: "{{ region }}"
+      register: ec2_facts
+    - name: Exterminate!
+      ec2:
+        region: "{{ region }}"
+        instance_id: "{{ item.id }}"
+        state: absent
+        wait: yes
+      with_items: "{{ ec2_facts.instances }}"

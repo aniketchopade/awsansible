@@ -2,8 +2,8 @@
 EC2list:
   - ControlServerCluster:
     region : us-east-1
-    keyname : example
-    keypath : /home/aniket/.ssh/testkey.pub
+    keyname : control
+    keypath : /home/aniket/.ssh/control.pub
     instance_type : t2.micro
     image : ami-26ebbc5c
     security_group : sg-7f6c1308
@@ -11,8 +11,8 @@ EC2list:
     intsnace_count : 2
   - CouchbaseServerCluster:
     region : us-east-1
-    keyname : example
-    keypath : /home/aniket/.ssh/testkey.pub
+    keyname : couch
+    keypath : /home/aniket/.ssh/couch.pub
     instance_type : t2.micro
     image : ami-26ebbc5c
     security_group : sg-7f6c1308
@@ -20,8 +20,8 @@ EC2list:
     intsnace_count : 2
   - KafkaServerCluster:
     region : us-east-1
-    keyname : example
-    keypath : /home/aniket/.ssh/testkey.pub
+    keyname : kafka
+    keypath : /home/aniket/.ssh/kafka.pub
     instance_type : t2.micro
     image : ami-26ebbc5c
     security_group : sg-7f6c1308

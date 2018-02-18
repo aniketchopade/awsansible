@@ -1,5 +1,21 @@
+---
 - hosts: localhost
-  gather_facts: no
   tasks:
-    - debug: msg ="{{item}}"
-      with_items: "{{ EC2list }}"
+    - user:
+       name: aniket
+       generate_ssh_key: yes
+       ssh_key_bits: 2048
+       ssh_key_type: rsa
+       ssh_key_file: .ssh/couchbase
+    - user:
+       name: aniket
+       generate_ssh_key: yes
+       ssh_key_bits: 2048
+       ssh_key_type: rsa
+       ssh_key_file: .ssh/kafka
+    - user:
+       name: aniket
+       generate_ssh_key: yes
+       ssh_key_bits: 2048
+       ssh_key_type: rsa
+       ssh_key_file: .ssh/control
