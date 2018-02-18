@@ -9,20 +9,22 @@
     
     - name: Create EC2 keys
       ec2_key:
-        region: "{{region}}"
-        name: "{{ keyname }}"
+        region: "{{item.item.region}}"
+        name: "{{ item.item.keyname }}"
         key_material: "{{ item.stdout }} "
       with_items: "{{sshkeys.results}}"
 
     - name: Build All three clusters  
       ec2:
-        region: "{{region}}"
-        key_name: "{{item.keyname}}"
-        instance_type: "{{instance_type}}"
-        image: "{{image}}"
-        wait: yes
-        group_id: "{{security_group}}"
-        count: "{{intsnace_count}}"
-        vpc_subnet_id: "{{subnet_id}}"
-        assign_public_ip: yes      
-      with_items: "{{EC2list}}"
+        region: "{{item.0.region}}"
+        key_name: "{{item.0.keyname}}"
+        instance_type: "{{item.0.instance_type}}"
+        image: "{{item.0.image}}"
+        wait: no
+        group_id: "{{item.0.security_group}}"
+        count: "{{item.1.intsnace_count}}"
+        vpc_subnet_id: "{{item.1.subnet_id}}"
+        assign_public_ip: "{{item.0.public_ip}}"
+      with_subelements: 
+        - "{{EC2list}}"
+        - availability_zones
